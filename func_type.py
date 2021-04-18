@@ -18,9 +18,6 @@ def add_movie(data):
 
 
 def add_app(data):
-    if data['rating'] > 3:
-        is_awesome = True
-    else:
-        is_awesome = False
+    is_awesome = True if data['rating'] > 3 else False
     app = App(data['name'], data['genre'], data['rating'], data['version'], data['size_bytes'], is_awesome)
     session.add(app)
