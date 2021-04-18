@@ -4,12 +4,12 @@ from models import Song, Movie, App
 from db import session
 
 
-def song(data):
+def add_song(data):
     song = Song(data['artist_name'], data['title'], data['year'], data['release'])
     session.add(song)
 
 
-def movie(data):
+def add_movie(data):
     original_title_normalized = data['original_title']
     original_title_normalized = original_title_normalized.replace(' ', '_').lower()
     original_title_normalized = re.sub('[^A-Za-z0-9_]+', '', original_title_normalized)
@@ -17,7 +17,7 @@ def movie(data):
     session.add(movie)
 
 
-def app(data):
+def add_app(data):
     if data['rating'] > 3:
         is_awesome = True
     else:

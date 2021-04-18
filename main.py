@@ -3,14 +3,13 @@ import json
 import time
 
 from db import session
-from func_type import song, movie, app
+from func_type import add_song, add_movie, add_app
 
 from config import BUCKET_NAME, FILE_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
 
 s3 = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
 
-key_values = ['song', 'movie', 'app']
-function_dict = {'song': song, 'movie': movie, 'app': app}
+function_dict = {'song': add_song, 'movie': add_movie, 'app': add_app}
 
 def get_file(bucket_name, file_name):
     try:
@@ -35,7 +34,7 @@ def parse():
     print(f'Count new files: {len(files_name)}')
     for file_name in files_name:
         json_content = json.loads(get_file(BUCKET_NAME, file_name))
-        filter_json_content = list(filter(lambda d: d['type'] in key_values, json_content))
+        filter_json_content = list(filter(lambda d: d['type'] in function_dict.keys(), json_content))
         for dict_item in filter_json_content:
             function_dict[dict_item['type']](dict_item['data'])
     session.commit()
@@ -51,7 +50,6 @@ def run_parse():
 
 
 run_parse()
-
 
 
 
